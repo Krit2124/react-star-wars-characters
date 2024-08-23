@@ -1,38 +1,145 @@
-.App {
-  text-align: center;
+@import url('https://fonts.googleapis.com/css2?family=Karla:ital,wght@0,200..800;1,200..800&display=swap');
+
+:root {
+  --blue-default: #1F2A63;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Karla", sans-serif;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
+/* Контейнеры */
+.container {
+  max-width: 1126px;
+  margin: 0 auto;
+}
+
+@media (max-width: 1150px) {
+  .container {
+    margin: 0 5vw;
   }
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+header {
+  position: sticky;
+  top: 0px;
+  padding: 10px 0 3px 0;
+  font-size: 25px;
+  background-color: var(--blue-default);
+  z-index: 100;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+/* Заголовки и текст */
+h1 {
+  font-size: 72px;
+  font-weight: 400;
+}
+
+h2 {
+  font-size: 32px;
+  font-weight: 400;
+}
+
+h3 {
+  font-size: 18px;
+}
+
+h6 {
+  font-size: 12px;
+}
+
+.color-white {
   color: white;
 }
 
-.App-link {
-  color: #61dafb;
+/* Кнопки */
+.button-text {
+  border: none;
+  padding: 15px 30px;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.button-orange {
+  background-color: #FFC107;
+  color: #000000;
+  box-shadow: 0px -9px rgba(0, 0, 0, 0.18) inset;
+}
+
+.button-orange:hover {
+  background-color: #e6a923;
+}
+
+/* Flex */
+.flex-row-sb-c {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.flex-col-sb-c {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.flex-col-sb-left {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.flex-gap-73 {
+  gap: 73px;
+}
+
+.flex-gap-64 {
+  gap: 64px;
+}
+
+.flex-gap-15 {
+  gap: 15px;
+}
+
+/* Отдельные элементы */
+.header-link {
+  font-size: 25px;
+  text-decoration: none;
+  font-weight: 300;
+}
+
+.header-link.active::after {
+  content: '';
+  display: block;
+  width: 90%;
+  height: 3px;
+  background-color: #d0d5ab;
+  position: relative;
+  border-radius: 5px;
+  top: 10px;
+  left: 5%;
+}
+
+.section-mainPage {
+  padding-top: 50px;
+  background: linear-gradient(#1F2A63, #17002F);
+  height: calc(100vh - 99px);
+}
+
+.mainPage-content {
+  width: 100%;
+}
+
+.mainPage-image {
+  position: relative;
+  right: -70px
 }
