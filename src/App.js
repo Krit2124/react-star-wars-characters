@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { Outlet, useNavigate } from 'react-router-dom';
 
-import { Outlet } from 'react-router-dom';
 import './App.css';
 import Header from './components/header';
 

@@ -11,7 +11,7 @@ const Header = () => {
             </div>
 
             <div className='flex-row-sb-c flex-gap-73'>
-                <NavLink to="/main" className='header-link color-white'>
+                <NavLink to="/" className='header-link color-white'>
                     <p>Home</p>
                 </NavLink>
 

@@ -1,18 +1,19 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import yodaImage from '../assets/Yoda.png';
+import { useGeneralStore } from 'store/store';
 
 const MainPage = () => {
     const navigate = useNavigate();
 
     return (
-        <section className='section-mainPage flex-row-sb-c'>
+        <section className='section-mainPage size-full-vertical-pagePercent-withHeader flex-row-sb-c'>
             <div className='container flex-row-sb-c'>
                 <div className="mainPage-content flex-col-sb-left flex-gap-64 color-white">
                     <h1><b>Find</b> all your favorite <b>characters</b></h1>
 
-                    <h2>You can find out all the information about your favorite characters</h2>
+                    <h3>You can find out all the information about your favorite characters</h3>
 
                     <button className="button-text button-orange" onClick={() => navigate(`/characters`)}>See more...</button>
                 </div>
