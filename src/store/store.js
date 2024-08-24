@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 
-export const useGeneralStore = create((set) => ({
+export const useGeneralStore = create((set, get) => ({
     amountOfCharacters: 0,
     // Все полученные персонажи
     characters: [],
@@ -12,15 +12,22 @@ export const useGeneralStore = create((set) => ({
     filterOptionsColorEye: ['All'],
     // Выбранный фильтр
     chosenOptionColorEye: 'All',
+    setFilterOptionsColorEye: (value) => set(() => ({ chosenOptionColorEye: value })),
     // Ошибка
     error: null,
     // Функция для фильтрации персонажей по цвету глаз
     filterCharactersByEyeColor: () => {
+        console.log(get().chosenOptionColorEye);
+        
+
         set((state) => ({
             charactersToDisplay: state.chosenOptionColorEye === 'All'
                 ? state.characters
                 : state.characters.filter(character => character.eye_color === state.chosenOptionColorEye)
         }));
+
+        console.log(get().charactersToDisplay);
+        
     },
     // Получение данных о персонажах
     fetchCharacters: async (page) => {
@@ -48,11 +55,7 @@ export const useGeneralStore = create((set) => ({
                 };
             });
 
-            set((state) => ({
-                charactersToDisplay: state.chosenOptionColorEye === 'All'
-                    ? state.characters
-                    : state.characters.filter(character => character.eye_color === state.chosenOptionColorEye)
-            }));
+            get().filterCharactersByEyeColor();
             
             set({ amountOfCharacters: data.count });
             return data;

@@ -13,15 +13,17 @@ const CharactersPage = () => {
         error,
         clearError,
         filterCharactersByEyeColor,
+        setFilterOptionsColorEye,
      } = useGeneralStore();
 
-     const [lastCharacterPage, setLastCharacterPage] = useState(1);
+    const [lastCharacterPage, setLastCharacterPage] = useState(1);
 
-     const handleFilterChange = (e) => {
-        filterCharactersByEyeColor(e.target.value);
+    const handleFilterChange = (e) => {
+        setFilterOptionsColorEye(e.target.value);
+        filterCharactersByEyeColor();
     };
 
-     const checkIfContentFillsScreen = () => {
+    const checkIfContentFillsScreen = () => {
         // Проверяем, если контент меньше, чем высота окна, и подгрузка еще не завершена
         if (document.documentElement.scrollHeight - 200 <= window.innerHeight && !isCharactersEnded) {
             setLastCharacterPage((prevPage) => prevPage + 1);
