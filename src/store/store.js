@@ -6,28 +6,28 @@ export const useGeneralStore = create((set, get) => ({
     characters: [],
     // Персонажи для вывода в соответствии с фильтрами
     charactersToDisplay: [],
+    // Выбранный персонаж для отображения детальной информации
+    chosenCharacterId: 0,
+    setChosenCharacterId: (value) => set(() => ({ chosenCharacterId: value })),
     // Флаг о том, что получить больше персонажей невозможно
     isCharactersEnded: false,
     // Опции для фильтрации по цвету глаз
-    filterOptionsColorEye: ['All'],
+    filterOptionsColorEye: ['All', 'blue', 'yellow', 'red', 'brown', 'blue-gray', 'black', 'orange', 'hazel', 'pink', 'red, blue', 'gold', 'green, yellow', 'white'],
     // Выбранный фильтр
     chosenOptionColorEye: 'All',
     setFilterOptionsColorEye: (value) => set(() => ({ chosenOptionColorEye: value })),
     // Ошибка
     error: null,
+    // Открыта ли карточка персонажа
+    isDetailsOpen: false,
+    setIsDetailsOpen: (value) => set(() => ({ isDetailsOpen: value })),
     // Функция для фильтрации персонажей по цвету глаз
     filterCharactersByEyeColor: () => {
-        console.log(get().chosenOptionColorEye);
-        
-
         set((state) => ({
             charactersToDisplay: state.chosenOptionColorEye === 'All'
                 ? state.characters
                 : state.characters.filter(character => character.eye_color === state.chosenOptionColorEye)
         }));
-
-        console.log(get().charactersToDisplay);
-        
     },
     // Получение данных о персонажах
     fetchCharacters: async (page) => {
@@ -36,7 +36,6 @@ export const useGeneralStore = create((set, get) => ({
             const data = await response.json();
             if (data.next === null) {
                 set({ isCharactersEnded: true });
-                return;
             } 
             set((state) => {
                 const charactersSet = new Set(state.characters?.map(char => JSON.stringify(char)));

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import CharactersList from './charactersList';
-
 import { useGeneralStore } from 'store/store';
 
 const CharactersPage = () => {
@@ -18,31 +17,24 @@ const CharactersPage = () => {
 
     const [lastCharacterPage, setLastCharacterPage] = useState(1);
 
-    const handleFilterChange = (e) => {
-        setFilterOptionsColorEye(e.target.value);
-        filterCharactersByEyeColor();
-    };
-
-    const checkIfContentFillsScreen = () => {
+    const checkAndLoadUntilFull = () => {
         // Проверяем, если контент меньше, чем высота окна, и подгрузка еще не завершена
         if (document.documentElement.scrollHeight - 200 <= window.innerHeight && !isCharactersEnded) {
-            setLastCharacterPage((prevPage) => prevPage + 1);
+            setLastCharacterPage(prevPage => prevPage + 1);
         }
     };
 
+    const handleFilterChange = (e) => {
+        setFilterOptionsColorEye(e.target.value);
+        filterCharactersByEyeColor();
+        setTimeout(checkAndLoadUntilFull, 0);
+    };
+
     useEffect(() => {
-        // Получение первичных данных о персонажах
-        fetchCharacters(lastCharacterPage).then(() => {
-            checkIfContentFillsScreen(); // Проверяем, заполнен ли экран после первой загрузки
-        });
-
-        // Обработчик скролла страницы
+        // Обработчик скролла страницы для подгрузки данных при достижении конца страницы
         const handleScroll = () => {
-            if (window.innerHeight + document.documentElement.scrollTop < document.documentElement.offsetHeight - 160) return;
-
-            // Проверка на наличие следующей страницы
-            if (!isCharactersEnded) {
-                setLastCharacterPage((prevPage) => prevPage + 1);
+            if (window.innerHeight + document.documentElement.scrollTop >= document.documentElement.offsetHeight - 160 && !isCharactersEnded) {
+                setLastCharacterPage(prevPage => prevPage + 1);
             }
         };
 
@@ -52,10 +44,15 @@ const CharactersPage = () => {
             window.removeEventListener('scroll', handleScroll);
             clearError();
         }
-     }, [])
- 
+    }, []);
+
     useEffect(() => {
-        fetchCharacters(lastCharacterPage);
+        // Запуск проверки и загрузки до заполнения экрана после каждой загрузки страницы
+        fetchCharacters(lastCharacterPage).then(() => {
+            checkAndLoadUntilFull();
+        });
+        console.log(lastCharacterPage);
+        console.log(characters);
     }, [lastCharacterPage]);
 
     // уведомление об ошибке

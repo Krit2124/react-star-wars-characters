@@ -14,12 +14,13 @@
 
 /* Контейнеры */
 .container {
-  max-width: 1126px;
+  width: 1126px;
   margin: 0 auto;
 }
 
 @media (max-width: 1150px) {
   .container {
+    width: 90vw;
     margin: 0 5vw;
   }
 }
@@ -108,11 +109,24 @@ h6 {
   background-color: #59ad5c;
 }
 
+.button-invisible {
+  border: none;
+  cursor: pointer;
+  background: none;
+}
+
 /* Flex */
 .flex-row-sb-c {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  align-items: center;
+}
+
+.flex-row-c-c {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
   align-items: center;
 }
 
@@ -142,6 +156,13 @@ h6 {
   flex-direction: column;
   justify-content: space-between;
   align-items: flex-start;
+}
+
+.flex-col-sb-right {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-end;
 }
 
 .flex-gap-73 {
@@ -177,6 +198,14 @@ h6 {
   width: 100%;
 }
 
+.size-full-horizontal-pagePercent {
+  width: 100vw;
+}
+
+.size-full-vertical-percent {
+  height: 100%;
+}
+
 .size-full-vertical-pagePercent-withHeader {
   min-height: calc(100vh - 99px);
 }
@@ -197,6 +226,10 @@ h6 {
 /* Тени */
 .shadow-default {
   box-shadow: 4px 4px 4px rgba(33, 33, 33, 0.10);
+}
+
+.shadow-text-default {
+  text-shadow: 4px 4px 2px rgba(33, 33, 33, 0.10);
 }
 
 /* Отдельные элементы */
@@ -222,11 +255,19 @@ h6 {
 /* Главная страница */
 .mainPage-content {
   width: 100%;
+  position: relative;
 }
 
 .mainPage-image {
-  position: relative;
-  right: -70px
+  position: absolute;
+  right: 10vw;
+}
+
+@media (max-width: 1350px) {
+  .mainPage-image img {
+    opacity: 0.5;
+    max-width: 90vw;
+  }
 }
 
 /* Фильтры */
@@ -275,4 +316,47 @@ h6 {
 
 .character-tag-blue {
   background-color: #07D6F2;
+}
+
+.box-details {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(0, 0, 0, 0.25);
+  z-index: 1000;
+}
+
+.card-details {
+  width: 797px;
+  height: 371px;
+  background: linear-gradient(180deg, #17002F 42%, #1F2A63 100%);
+  border-radius: 16px;
+}
+
+.card-details-imageBox {
+  width: 365px;
+  height: 371px;
+  background-color: var(--blue-default);
+  border-radius: 8px 0px 0px 8px;
+  padding: 15px;
+}
+
+.card-details-imageBox img {
+  position: relative;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.card-details-contentBox {
+  padding: 30px 13px;
+  width: 432px;
+  height: 371px;
+}
+
+.box-white {
+  background-color: white;
+  padding: 15px 24px;
+  border-radius: 8px;
 }
