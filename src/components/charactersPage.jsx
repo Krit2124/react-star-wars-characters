@@ -5,7 +5,6 @@ import { useGeneralStore } from 'store/store';
 const CharactersPage = () => {
     const { 
         amountOfCharacters,
-        amountOfPages,
         characters,
         filterOptionsColorEye,
         isCharactersEnded,
@@ -58,12 +57,10 @@ const CharactersPage = () => {
             window.removeEventListener('scroll', handleScroll);
             clearError();
         };
-    }, [isCharactersEnded, clearError]);
+    }, [isCharactersEnded, clearError, increasePage]);
 
     useEffect(() => {
         // Запуск заполнения экрана персонажами после запроса нового набора
-        console.log(lastCharacterPage);      
-        
         fetchCharacters(lastCharacterPage).then(() => {
             checkAndLoadUntilFull();
         });
