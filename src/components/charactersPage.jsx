@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import CharactersList from './charactersList';
 import { useGeneralStore } from 'store/store';
 
@@ -15,25 +15,26 @@ const CharactersPage = () => {
         setFilterOptionsColorEye,
      } = useGeneralStore();
 
+    // Номер последнего загруженного набора персонажей
     const [lastCharacterPage, setLastCharacterPage] = useState(1);
 
-    const checkAndLoadUntilFull = () => {
-        // Проверяем, если контент меньше, чем высота окна, и подгрузка еще не завершена
-        if (document.documentElement.scrollHeight - 200 <= window.innerHeight && !isCharactersEnded) {
+    // Функция для загрузки данных, пока страница визуально не заполнится, либо пока не кончатся персонажи
+    const checkAndLoadUntilFull = useCallback(() => {
+        if (document.documentElement.scrollHeight - 250 <= window.innerHeight && !isCharactersEnded) {
             setLastCharacterPage(prevPage => prevPage + 1);
         }
-    };
+    }, [isCharactersEnded]);
 
-    const handleFilterChange = (e) => {
+    const handleFilterChange = useCallback((e) => {
         setFilterOptionsColorEye(e.target.value);
         filterCharactersByEyeColor();
         setTimeout(checkAndLoadUntilFull, 0);
-    };
+    }, [setFilterOptionsColorEye, filterCharactersByEyeColor, checkAndLoadUntilFull]);
 
     useEffect(() => {
         // Обработчик скролла страницы для подгрузки данных при достижении конца страницы
         const handleScroll = () => {
-            if (window.innerHeight + document.documentElement.scrollTop >= document.documentElement.offsetHeight - 160 && !isCharactersEnded) {
+            if (window.innerHeight + document.documentElement.scrollTop >= document.documentElement.offsetHeight - 250 && !isCharactersEnded) {
                 setLastCharacterPage(prevPage => prevPage + 1);
             }
         };
@@ -43,17 +44,17 @@ const CharactersPage = () => {
         return () => {
             window.removeEventListener('scroll', handleScroll);
             clearError();
-        }
-    }, []);
+        };
+    }, [isCharactersEnded, clearError]);
 
     useEffect(() => {
-        // Запуск проверки и загрузки до заполнения экрана после каждой загрузки страницы
-        fetchCharacters(lastCharacterPage).then(() => {
-            checkAndLoadUntilFull();
-        });
-        console.log(lastCharacterPage);
-        console.log(characters);
-    }, [lastCharacterPage]);
+        // Запуск заполнения экрана персонажами после запроса нового набора
+        if (!isCharactersEnded) {
+            fetchCharacters(lastCharacterPage).then(() => {
+                checkAndLoadUntilFull();
+            });
+        }
+    }, [lastCharacterPage, fetchCharacters, checkAndLoadUntilFull, isCharactersEnded]);
 
     // уведомление об ошибке
     if (error && !isCharactersEnded) {
@@ -87,11 +88,13 @@ const CharactersPage = () => {
                 <div className='flex-row-left-c flex-gap-15 size-full-horizontal-percent'>
                     <label htmlFor="color-eye-select">color eye</label>
                     <select name="color-eye" id="color-eye-select" className='select-filter text-center shadow-default' onChange={handleFilterChange}>
-                        {filterOptionsColorEye.map((option) => { return <option key={option} value={option}>{option}</option>})}
+                        {filterOptionsColorEye.map((option) => <option key={option} value={option}>{option}</option>)}
                     </select>
                 </div>
 
                 <CharactersList />
+
+                {!isCharactersEnded && <h2>Loading...</h2>}
             </div>
         </section>
     );

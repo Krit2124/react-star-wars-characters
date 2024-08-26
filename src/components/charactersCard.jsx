@@ -10,6 +10,7 @@ const CharactersCard = ({ id, name, height, mass, birthYear, gender}) => {
 
     return (
         <button className="button-invisible" onClick={() => {
+            // Изменение флага отображения карточки с детальным описанием персонажа
             setChosenCharacterId(id);
             setIsDetailsOpen(true);
         }}>

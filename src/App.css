@@ -318,6 +318,7 @@ h6 {
   background-color: #07D6F2;
 }
 
+/* Карточка персонажа с детальной информацией */
 .box-details {
   position: fixed;
   top: 50%;
@@ -359,4 +360,9 @@ h6 {
   background-color: white;
   padding: 15px 24px;
   border-radius: 8px;
+}
+
+/* Страница с ошибкой */
+.errorPage-content img {
+  max-width: 90vw;
 }
