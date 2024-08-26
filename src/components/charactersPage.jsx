@@ -4,26 +4,39 @@ import { useGeneralStore } from 'store/store';
 
 const CharactersPage = () => {
     const { 
-        fetchCharacters,
         amountOfCharacters,
+        amountOfPages,
         characters,
         filterOptionsColorEye,
         isCharactersEnded,
+        fetchAmountOfCharacters,
+        fetchCharacters,
         error,
         clearError,
         filterCharactersByEyeColor,
         setFilterOptionsColorEye,
-     } = useGeneralStore();
+    } = useGeneralStore();
+
+    // Получение информации о количестве персонажей
+    useEffect(() => {
+        fetchAmountOfCharacters();
+    }, [])
 
     // Номер последнего загруженного набора персонажей
     const [lastCharacterPage, setLastCharacterPage] = useState(1);
+    
+    const increasePage = useCallback(() => {
+        if (!isCharactersEnded) {
+            setLastCharacterPage(prevPage => prevPage + 1);
+        }
+    }, [setLastCharacterPage, isCharactersEnded]);
 
     // Функция для загрузки данных, пока страница визуально не заполнится, либо пока не кончатся персонажи
     const checkAndLoadUntilFull = useCallback(() => {
-        if (document.documentElement.scrollHeight - 250 <= window.innerHeight && !isCharactersEnded) {
-            setLastCharacterPage(prevPage => prevPage + 1);
+        if (document.documentElement.scrollHeight - 250 <= window.innerHeight) {
+            increasePage();
         }
-    }, [isCharactersEnded]);
+    }, [increasePage]);
 
     const handleFilterChange = useCallback((e) => {
         setFilterOptionsColorEye(e.target.value);
@@ -35,7 +48,7 @@ const CharactersPage = () => {
         // Обработчик скролла страницы для подгрузки данных при достижении конца страницы
         const handleScroll = () => {
             if (window.innerHeight + document.documentElement.scrollTop >= document.documentElement.offsetHeight - 250 && !isCharactersEnded) {
-                setLastCharacterPage(prevPage => prevPage + 1);
+                increasePage();
             }
         };
 
@@ -49,15 +62,15 @@ const CharactersPage = () => {
 
     useEffect(() => {
         // Запуск заполнения экрана персонажами после запроса нового набора
-        if (!isCharactersEnded) {
-            fetchCharacters(lastCharacterPage).then(() => {
-                checkAndLoadUntilFull();
-            });
-        }
-    }, [lastCharacterPage, fetchCharacters, checkAndLoadUntilFull, isCharactersEnded]);
+        console.log(lastCharacterPage);      
+        
+        fetchCharacters(lastCharacterPage).then(() => {
+            checkAndLoadUntilFull();
+        });
+    }, [lastCharacterPage, fetchCharacters, checkAndLoadUntilFull]);
 
     // уведомление об ошибке
-    if (error && !isCharactersEnded) {
+    if (error) {
         return (
             <div className="container flex-col-c-c size-full-vertical-pagePercent-withHeader">
                 <h2>Error: {error.message}</h2>

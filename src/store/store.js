@@ -2,6 +2,7 @@ import { create } from 'zustand';
 
 export const useGeneralStore = create((set, get) => ({
     amountOfCharacters: 0,
+    amountOfPages: 1,
     // Все полученные персонажи
     characters: [],
     // Персонажи для вывода в соответствии с фильтрами
@@ -29,10 +30,24 @@ export const useGeneralStore = create((set, get) => ({
                 : state.characters.filter(character => character.eye_color === state.chosenOptionColorEye)
         }));
     },
+    // Получение данных о количестве персонажей и количестве страниц
+    fetchAmountOfCharacters: async () => {
+        try {
+            const response = await fetch(`https://www.swapi.tech/api/people`);
+            const data = await response.json();
+            set({ 
+                amountOfCharacters: data.total_records,
+                amountOfPages: data.total_pages,
+            });
+        } catch (err) {
+            set({ error: err });
+        }
+    },
     // Получение данных о персонажах
     fetchCharacters: async (page) => {
         try {
-            const response = await fetch(`https://swapi.dev/api/people/?page=${page}`)
+            if (page > get().amountOfPages) return;
+            const response = await fetch(`https://swapi.dev/api/people/?page=${page}`);
             const data = await response.json();
             if (data.next === null) {
                 set({ isCharactersEnded: true });
@@ -55,8 +70,6 @@ export const useGeneralStore = create((set, get) => ({
             });
 
             get().filterCharactersByEyeColor();
-            
-            set({ amountOfCharacters: data.count });
             return data;
             
         } catch (err) {
